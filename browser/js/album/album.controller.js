@@ -1,9 +1,10 @@
 'use strict';
 
 juke.controller('AlbumCtrl', function($scope, $http, $rootScope, $log, StatsFactory, PlayerFactory) {
-  $scope.test = 'testing';
+
   $scope.playing = PlayerFactory.isPlaying;
   $scope.currentSong = PlayerFactory.getCurrentSong;
+  
   // load our initial data
   $http.get('/api/albums/')
   .then(function(res){return $http.get('/api/albums/' + res.data[1]._id)}) // temp: use first
@@ -27,38 +28,29 @@ juke.controller('AlbumCtrl', function($scope, $http, $rootScope, $log, StatsFact
   // main toggle
   $scope.toggle = function (song) {
     if (PlayerFactory.isPlaying() && song === PlayerFactory.getCurrentSong()) {
-      console.log('pause please');
-      pause();
+      PlayerFactory.pause();
     } else {
-      console.log('else (not playing)')
-      play(song);
+      if($scope.currentSong()) {
+        PlayerFactory.resume();
+      }
+      else 
+      { PlayerFactory.start(song, $scope.album.songs); }
     }
   };
 
 
-  // functionality
-  function pause () {
-      PlayerFactory.pause();
-  }
-  function play (song) {
-    PlayerFactory.start(song, $scope.album.songs)
-  };
-
   // a "true" modulo that wraps negative to the top of the range
-  function mod (num, m) { return ((num % m) + m) % m; };
+  // function mod (num, m) { return ((num % m) + m) % m; };
 
   // jump `interval` spots in album (negative to go back, default +1)
-  function skip (interval) {
-    if (!$scope.currentSong) return;
-    var index = $scope.currentSong.albumIndex;
-    index = mod( (index + (interval || 1)), $scope.album.songs.length );
-    $scope.currentSong = $scope.album.songs[index];
-    if ($scope.playing) $rootScope.$broadcast('play', $scope.currentSong);
-  };
 
-  $scope.next = PlayerFactory.next;
-  $scope.prev = PlayerFactory.previous;
-  // function next () { skip(1); };
-  // function prev () { skip(-1); };
+  // function skip (interval) {
+  //   if (!$scope.currentSong) return;
+  //   var index = $scope.currentSong.albumIndex;
+  //   index = mod( (index + (interval || 1)), $scope.album.songs.length );
+  //   $scope.currentSong = $scope.album.songs[index];
+  //   if ($scope.playing) $rootScope.$broadcast('play', $scope.currentSong);
+  // };
+
 
 });

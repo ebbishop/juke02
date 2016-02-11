@@ -29,23 +29,23 @@ juke.factory('PlayerFactory', function($rootScope){
 	    audio.load();
 	    audio.play();
   	},
-	  pause: function() {
+	pause: function() {
 	    audio.pause();
   	},
-	  resume: function() {
+	resume: function() {
 	    audio.play();
   	},
-	  isPlaying: function() {
+	isPlaying: function() {
 	    return !audio.paused;
   	},
-	  getCurrentSong: function() {
+	getCurrentSong: function() {
 	  	return currentSong;
   	},
-	  next: function() {
-	  	this.skip(1);
+	 next: function() {
+	  	PlayerFactoryObj.skip(1);
   	},
     previous: function() {
-    	this.skip(-1);
+    	PlayerFactoryObj.skip(-1);
   	},
   	skip: function(interval){
     	whereAmI = currentSongList.indexOf(currentSong);
@@ -62,7 +62,7 @@ juke.factory('PlayerFactory', function($rootScope){
   		if(currentSong){
   			// console.log( audio.currentTime)
   			// console.log( audio.duration)
-  			console.log(100*(audio.currentTime / audio.duration));
+  			// console.log(100*(audio.currentTime / audio.duration));
 			return 100*(audio.currentTime / audio.duration);
   		}
   		return 0;
