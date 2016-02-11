@@ -39,6 +39,15 @@ juke.controller('AlbumCtrl', function($scope, $http, $rootScope, $log, StatsFact
   };
 
 
+  $scope.showAlbum = false
+  $scope.$on('showOneAlbum', function(event,albumID){
+    $scope.showAlbum = !$scope.showAlbum
+  });
+  $scope.$on('viewAlbums', function(){
+    $scope.showAlbum = false;
+  })
+
+
   // a "true" modulo that wraps negative to the top of the range
   // function mod (num, m) { return ((num % m) + m) % m; };
 
