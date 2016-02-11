@@ -18,13 +18,14 @@ juke.controller('BrowseAlbumsCtrl', function($scope, $http, $rootScope, $log, St
 	    $scope.albums = arrayOfAlbumObjects;
 	  })
 	  .catch($log.error); // $log service can be turned on and off; also, pre-bound
-  
+
   $scope.showAlbums = false;
   $scope.$on('viewAlbums', function(){
   	$scope.showAlbums = !$scope.showAlbums;
   })
 
   $scope.showOneAlbum = function(albumId){
+    console.log(albumId);
   	$rootScope.$broadcast('showOneAlbum', albumId);
   	$scope.showAlbums = false;
   }
