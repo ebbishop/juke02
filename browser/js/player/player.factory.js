@@ -1,18 +1,24 @@
 'use strict';
 
-juke.factory('PlayerFactory', function(){
+juke.factory('PlayerFactory', function($rootScope){
   // non-UI logic in here
   var audio = document.createElement('audio');
   var currentSong = null;
   var currentSongList;
   var whereAmI;
 
+  // auto-advance
   audio.addEventListener('ended', function(){
-    this.next();
+    PlayerFactoryObj.next();
+  });
+
+  audio.addEventListener('timeupdate', function(){
+  	PlayerFactoryObj.getProgress();
+  	$rootScope.$digest();
   })
 
 
-  return {
+  var PlayerFactoryObj = {
   	start: function(song, songList) {
 	    if(songList) {
 	    	currentSongList = songList;
@@ -56,13 +62,14 @@ juke.factory('PlayerFactory', function(){
   		if(currentSong){
   			// console.log( audio.currentTime)
   			// console.log( audio.duration)
-  				return 100*(audio.currentTime / audio.duration);
+  			console.log(100*(audio.currentTime / audio.duration));
+			return 100*(audio.currentTime / audio.duration);
   		}
   		return 0;
   	},
 
   }
-
+  return PlayerFactoryObj
 
 });
 
