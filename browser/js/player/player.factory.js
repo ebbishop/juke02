@@ -6,7 +6,11 @@ juke.factory('PlayerFactory', function(){
   var currentSong = null;
   var currentSongList;
   var whereAmI;
-  var progress = 0;
+
+  audio.addEventListener('ended', function(){
+    this.next();
+  })
+
 
   return {
   	start: function(song, songList) {
@@ -14,58 +18,55 @@ juke.factory('PlayerFactory', function(){
 	    	currentSongList = songList;
 	    }
 	    this.pause();
-	    // $scope.playing = true;
-	    // resume current song
-	    // if (song === $scope.currentSong) return audio.play();
-	    // enable loading new song
 	    currentSong = song;
 	    audio.src = song.audioUrl;
 	    audio.load();
 	    audio.play();
   	},
-  	  pause: function() {
+	  pause: function() {
 	    audio.pause();
   	},
-  	  resume: function() {
+	  resume: function() {
 	    audio.play();
-	},
-  	  isPlaying: function() {
+  	},
+	  isPlaying: function() {
 	    return !audio.paused;
-	},
-  	  getCurrentSong: function() {
-  	  	return currentSong;
-	},
-  	  next: function() {
-  	  	this.skip(1);
-	},
-  	  previous: function() {
-  	  	this.skip(-1);
-	},
-	skip: function(interval){
-  	  	whereAmI = currentSongList.indexOf(currentSong);
+  	},
+	  getCurrentSong: function() {
+	  	return currentSong;
+  	},
+	  next: function() {
+	  	this.skip(1);
+  	},
+    previous: function() {
+    	this.skip(-1);
+  	},
+  	skip: function(interval){
+    	whereAmI = currentSongList.indexOf(currentSong);
 
-  	  	if(whereAmI+interval<0) {
-  	  		this.start(currentSongList[currentSongList.length - 1]);
-  	  	}else if(whereAmI+interval>currentSongList.length-1) {
-  	  		this.start(currentSongList[0])
-  	  	}else{
-  	  		this.start(currentSongList[whereAmI+interval])
-  	  	}
-	},
-	getProgress: function(){
-		if(currentSong){
-		// 	audio.addEventListener('timeupdate', function(){
-			console.log( audio.currentTime)
-			console.log( audio.duration)
-				return 100*(audio.currentTime / audio.duration);
-		// 	})
-		}
-		return 0;
-	}
+    	if(whereAmI+interval<0) {
+    		this.start(currentSongList[currentSongList.length - 1]);
+    	}else if(whereAmI+interval>currentSongList.length-1) {
+    		this.start(currentSongList[0])
+    	}else{
+    		this.start(currentSongList[whereAmI+interval])
+    	}
+  	},
+  	getProgress: function(){
+  		if(currentSong){
+  			// console.log( audio.currentTime)
+  			// console.log( audio.duration)
+  				return 100*(audio.currentTime / audio.duration);
+  		}
+  		return 0;
+  	},
+
   }
+
+
 });
 
-/* 
+/*
 
 It should expose methods like:
 

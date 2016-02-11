@@ -1,12 +1,12 @@
 'use strict';
 
-juke.controller('AlbumCtrl', function($scope, $http, $rootScope, $log, StatsFactory) {
+juke.controller('AlbumCtrl', function($scope, $http, $rootScope, $log, StatsFactory, PlayerFactory) {
 
   // load our initial data
   $http.get('/api/albums/')
-  .then(res => $http.get('/api/albums/' + res.data[1]._id)) // temp: use first
-  .then(res => res.data)
-  .then(album => {
+  .then(function(res){return $http.get('/api/albums/' + res.data[1]._id)}) // temp: use first
+  .then(function(res){ return res.data})
+  .then(function(album){
     album.imageUrl = '/api/albums/' + album._id + '.image';
     album.songs.forEach(function (song, i) {
       song.audioUrl = '/api/songs/' + song._id + '.audio';
@@ -24,14 +24,19 @@ juke.controller('AlbumCtrl', function($scope, $http, $rootScope, $log, StatsFact
 
   // main toggle
   $scope.toggle = function (song) {
-    if ($scope.playing && song === $scope.currentSong) {
-      $rootScope.$broadcast('pause');
-    } else $rootScope.$broadcast('play', song);
+    if (PlayerFactory.isPlaying() && song === PlayerFactory.getCurrentSong()) {
+      console.log('pause please');
+      PlayerFactory.pause();
+    } else {
+      console.log('else (not playing)')
+      PlayerFactory.start(song, $scope.album.songs)
+      // $rootScope.$broadcast('play', song);
+    }
   };
 
   // incoming events (from Player, toggle, or skip)
   $scope.$on('pause', pause);
-  $scope.$on('play', play);
+  // $scope.$on('play', play);
   $scope.$on('next', next);
   $scope.$on('prev', prev);
 
