@@ -7,6 +7,7 @@
     <link href="/style.css" rel="stylesheet" />
     <script src="/angular/angular.js" defer></script>
     <script src="/js/module.js" defer></script>
+    <script src="/js/album/albums.controller.js" defer></script>
     <script src="/js/album/album.controller.js" defer></script>
     <script src="/js/album/album.factory.js" defer></script>
     <script src="/js/player/player.controller.js" defer></script>
@@ -27,7 +28,39 @@
       </div>
 
       <div class="col-xs-10">
-        <div class="album" ng-controller="AlbumCtrl">
+
+      <!-- BROWSE ALBUMS -->
+
+      <div ng-controller="BrowseAlbumsCtrl">
+        <h3>Albums</h3>
+        <div class="row">
+          <div ng-repeat="album in albums" class="col-xs-4">
+            <a class="thumbnail" href="#">
+              <img ng-src={{album.imageUrl}}>
+              <div class="caption">
+                <h5>
+                  <span>{{album.name}}</span>
+                </h5>
+                <small>{{album.numberOfSongs}} songs</small>
+              </div>
+            </a>
+          </div>
+<!--           <div class="col-xs-4">
+            <a class="thumbnail" href="#">
+              <img src="http://placeholdit.imgix.net/~text?txtsize=33&txt=ALBUMtwoIMAGE&w=300&h=300">
+              <div class="caption">
+                <h5>
+                  <span>ALBUM TWO NAME HERE</span>
+                </h5>
+                <small>NUMBER OF SONGS HERE songs</small>
+              </div>
+            </a>
+          </div> -->
+        </div>
+      </div>
+
+      <!-- SINGLE ALBUM -->
+        <div ng-show="false" class="album" ng-controller="AlbumCtrl">
           <p>
             <h3>{{ album.name }}</h3>
               <div>Running time: {{ albumTotalTime }}</div>
